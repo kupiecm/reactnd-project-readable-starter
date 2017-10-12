@@ -14,8 +14,10 @@ class App extends Component {
 
   state = {
     activeTab: 'all',
+    compareField: 'voteScore',
+    reverseOrder: false,
     posts: null,
-    categories: null
+    categories: null,
   };
 
   toggle (tab) {
@@ -37,9 +39,17 @@ class App extends Component {
     });
   };
 
+  compareFcn = (field, reverse) => {
+    return function(a, b) {
+      return reverse ? a[field] - b[field] : b[field] - a[field];
+    };
+  };
+
+  // compareFcn = (a, b, field) => {return a[field] - b[field]};
+
   render () {
 
-    const { categories, posts } = this.state;
+    const { categories, posts, activeTab, compareField, reverseOrder } = this.state;
 
     return (
       <div className="App">
@@ -51,9 +61,9 @@ class App extends Component {
           <div className="col-xs-12">
             <Nav tabs>
               {categories && categories.map(category => (
-                <NavItem>
+                <NavItem key={category.name}>
                   <NavLink
-                    className={classnames({ active: this.state.activeTab === category.name })}
+                    className={classnames({ active: activeTab === category.name })}
                     onClick={() => {
                       this.toggle(category.name);
                     }}
@@ -63,22 +73,25 @@ class App extends Component {
                 </NavItem>
               ))}
             </Nav>
-            <TabContent activeTab={this.state.activeTab}>
+            <TabContent activeTab={activeTab}>
               {categories && categories.map(category => (
-                <TabPane tabId={category.name}>
+                <TabPane key={category.name} tabId={category.name}>
                   <div className="row">
                     <div className="col-sm-12">
-                      {posts && posts.filter(post =>
-                        category.name === 'all' || post.category === category.name).map(post => (
-                        <div className="row">
-                          <div className="separator-30"></div>
-                          <Card body>
-                            <CardTitle>{post.title}</CardTitle>
-                            <CardText>{post.body}</CardText>
-                            <Button>{post.author}</Button>
-                          </Card>
-                        </div>
-                      ))}
+                      {posts &&
+                      posts
+                        .filter(post => category.name === 'all' || post.category === category.name)
+                        .sort(this.compareFcn(compareField, reverseOrder))
+                        .map(post => (
+                          <div key={post.id} className="row">
+                            <div className="separator-30"></div>
+                            <Card body>
+                              <CardTitle>{post.title}</CardTitle>
+                              <CardText>{post.body}</CardText>
+                              <Button>{post.author}</Button>
+                            </Card>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 </TabPane>
