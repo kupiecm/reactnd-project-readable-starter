@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import logo from './logo.svg';
 import './App.css';
+import 'font-awesome/css/font-awesome.min.css';
 
-import { connect } from 'react-redux';
 import { addPost, removePost } from './actions';
 import * as API from './utils/api';
 
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText } from 'reactstrap';
 import classnames from 'classnames';
-
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText } from 'reactstrap';
+import { SortButton } from './components/sortBtn';
 
 class App extends Component {
 
@@ -45,8 +47,6 @@ class App extends Component {
     };
   };
 
-  // compareFcn = (a, b, field) => {return a[field] - b[field]};
-
   render () {
 
     const { categories, posts, activeTab, compareField, reverseOrder } = this.state;
@@ -57,7 +57,11 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo"/>
           <h1 className="App-title">Welcome to React</h1>
         </header>
+        <div className="separator-30"></div>
         <div className="container">
+          <div className="col-xs-12">
+            <SortButton/>
+          </div>
           <div className="col-xs-12">
             <Nav tabs>
               {categories && categories.map(category => (
