@@ -1,8 +1,33 @@
+import { combineReducers } from 'redux';
 import {
   ADD_POST,
   REMOVE_POST,
-  EDIT_POST
+  EDIT_POST,
+  FILTER_POSTS,
+  CHANGE_ORDER
 } from "../actions";
+
+function filter (state = { compareField: 'voteScore', reverseOrder: false }, action) {
+
+  const { type, compareField } = action;
+
+  switch (type) {
+    case FILTER_POSTS:
+      console.log('filtering posts');
+      return {
+        ...state,
+        compareField: compareField
+      };
+    case CHANGE_ORDER:
+      console.log('reversing order');
+      return {
+        ...state,
+        reverseOrder: !state.reverseOrder
+      };
+    default:
+      return state;
+  }
+}
 
 function post (state = {}, action) {
 
@@ -32,4 +57,7 @@ function post (state = {}, action) {
   }
 }
 
-export default post;
+export default combineReducers({
+  filter,
+  post
+});
