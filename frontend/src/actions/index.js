@@ -1,6 +1,7 @@
 export const ADD_POST = 'ADD_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const EDIT_POST = 'EDIT_POST';
+export const SELECT_POST = 'SELECT_POST';
 export const FILTER_POSTS = 'FILTER_POSTS';
 export const CHANGE_ORDER = 'CHANGE_ORDER';
 
@@ -15,14 +16,17 @@ export const changeOrder = () => ({
 
 export const addPost = ({ title, body, author, category }) => ({
   type: ADD_POST,
-  id: 'asd',
-  timestamp: Date.now(),
-  title: title,
-  body: body,
-  author: author,
-  category: category,
-  voteScore: 0,
-  deleted: false
+  post: {
+    id: 'asd',
+    timestamp: Date.now(),
+    title: title,
+    body: body,
+    author: author,
+    category: category,
+    voteScore: 0,
+    deleted: false
+  }
+
 });
 
 export const removePost = ({ id }) => ({
@@ -32,9 +36,16 @@ export const removePost = ({ id }) => ({
 
 export const editPost = ({ id, title, body, author, category }) => ({
   type: EDIT_POST,
-  id: id,
-  title: title,
-  body: body,
-  author: author,
-  category: category,
+  post: {
+    id: id,
+    title: title,
+    body: body,
+    author: author,
+    category: category,
+  }
+});
+
+export const selectPost = (post) => ({
+  type: SELECT_POST,
+  post: post
 });

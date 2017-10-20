@@ -6,19 +6,18 @@ import logo from './logo.svg';
 import './App.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-import { filterPosts, changeOrder, addPost, removePost } from './actions';
+import { filterPosts, changeOrder, addPost, removePost, selectPost } from './actions';
 import * as API from './utils/api';
 
 import classnames from 'classnames';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText } from 'reactstrap';
 import { ControlButtons } from './components/ControlButtons';
+import { Post } from './components/Post';
 
 class App extends Component {
 
   state = {
     activeTab: 'all',
-    // compareField: 'voteScore',
-    // reverseOrder: false,
     posts: null,
     categories: null,
   };
@@ -51,12 +50,14 @@ class App extends Component {
   render () {
 
     const { categories, posts, activeTab } = this.state;
-    const { compareField, reverseOrder, filter, changeOrder } = this.props;
+    const { compareField, reverseOrder, filter, changeOrder, selectPost } = this.props;
 
     return (
       <div className="App">
         <header className="App-header text-center">
-          <img src={logo} className="App-logo" alt="logo"/>
+          <Link to="/">
+            <img src={logo} className="App-logo" alt="logo"/>
+          </Link>
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div className="separator-30"></div>
@@ -100,7 +101,11 @@ class App extends Component {
                                 <CardTitle>{trim(post.title)}</CardTitle>
                                 <CardText>{trim(post.body)}</CardText>
                                 <div>
-                                  <Link to="/more">
+                                  <Link
+                                    to={`/post/${post.id}`}
+                                    onClick={(e) => {
+                                      selectPost(post);
+                                    }}>
                                     <Button color="info" className="col-4">More</Button>
                                   </Link>
                                 </div>
@@ -116,11 +121,7 @@ class App extends Component {
           </div>
         )}/>
 
-        <Route exact path="/more" render={() => (
-          <div className="container">
-            <h1>test</h1>
-          </div>
-        )}/>
+        <Route path="/post/:id" component={Post}/>
 
       </div>
     );
@@ -133,7 +134,7 @@ function trim (str) {
     : str;
 }
 
-function mapStateToProps ({ filter, post }) {
+function mapStateToProps ({ filter, posts }) {
 
   const { compareField, reverseOrder } = filter;
   return {
@@ -145,7 +146,8 @@ function mapStateToProps ({ filter, post }) {
 function mapDispatchToProps (dispatch) {
   return {
     filter: (data) => dispatch(filterPosts(data)),
-    changeOrder: (data) => dispatch(changeOrder(data))
+    changeOrder: (data) => dispatch(changeOrder(data)),
+    selectPost: (data) => dispatch(selectPost(data))
   }
 }
 

@@ -3,6 +3,7 @@ import {
   ADD_POST,
   REMOVE_POST,
   EDIT_POST,
+  SELECT_POST,
   FILTER_POSTS,
   CHANGE_ORDER
 } from "../actions";
@@ -13,13 +14,11 @@ function filter (state = { compareField: 'voteScore', reverseOrder: false }, act
 
   switch (type) {
     case FILTER_POSTS:
-      console.log('filtering posts');
       return {
         ...state,
         compareField: compareField
       };
     case CHANGE_ORDER:
-      console.log('reversing order');
       return {
         ...state,
         reverseOrder: !state.reverseOrder
@@ -29,29 +28,39 @@ function filter (state = { compareField: 'voteScore', reverseOrder: false }, act
   }
 }
 
-function post (state = {}, action) {
+function posts (state = { posts: {}, selectedPost: {} }, action) {
 
-  const { id, timestamp, title, body, author, category, voteScore, deleted } = action;
+  console.log(action);
+  const { id, timestamp, title, body, author, category, voteScore, deleted } = action.post ? action.post : {};
 
   switch (action.type) {
     case ADD_POST:
       return {
         ...state,
-        [id]: {
-          id,
-          timestamp,
-          title,
-          body,
-          author,
-          category,
-          voteScore,
-          deleted
+        posts: {
+          ...state.posts,
+          [id]: {
+            id,
+            timestamp,
+            title,
+            body,
+            author,
+            category,
+            voteScore,
+            deleted
+          }
         }
       };
     case REMOVE_POST:
-      return delete state[id];
+      return delete state.posts[id];
     case EDIT_POST:
       return {};
+    case SELECT_POST:
+      console.log(state);
+      return {
+        ...state,
+        selectedPost: action.post
+      };
     default:
       return state;
   }
@@ -59,5 +68,5 @@ function post (state = {}, action) {
 
 export default combineReducers({
   filter,
-  post
+  posts
 });
