@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Button, CardTitle, CardText } from 'reactstrap';
 
-export class Post extends Component {
+export default class PostView extends Component {
 
   render () {
 

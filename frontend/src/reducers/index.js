@@ -1,39 +1,23 @@
 import { combineReducers } from 'redux';
 import {
+  LOAD_POSTS,
   ADD_POST,
   REMOVE_POST,
   EDIT_POST,
-  SELECT_POST,
-  FILTER_POSTS,
-  CHANGE_ORDER
+  SELECT_POST
 } from "../actions";
 
-function filter (state = { compareField: 'voteScore', reverseOrder: false }, action) {
+function postsCtrl (state = { posts: [], selectedPost: {} }, action) {
 
-  const { type, compareField } = action;
-
-  switch (type) {
-    case FILTER_POSTS:
-      return {
-        ...state,
-        compareField: compareField
-      };
-    case CHANGE_ORDER:
-      return {
-        ...state,
-        reverseOrder: !state.reverseOrder
-      };
-    default:
-      return state;
-  }
-}
-
-function posts (state = { posts: {}, selectedPost: {} }, action) {
-
-  console.log(action);
   const { id, timestamp, title, body, author, category, voteScore, deleted } = action.post ? action.post : {};
 
+  console.log(action);
   switch (action.type) {
+    case LOAD_POSTS:
+      return {
+        ...state,
+        posts: action.posts ? action.posts : []
+      };
     case ADD_POST:
       return {
         ...state,
@@ -56,17 +40,16 @@ function posts (state = { posts: {}, selectedPost: {} }, action) {
     case EDIT_POST:
       return {};
     case SELECT_POST:
-      console.log(state);
       return {
         ...state,
-        selectedPost: action.post
+        selectedPost: action.post ? action.post : {}
       };
     default:
       return state;
   }
 }
 
-export default combineReducers({
-  filter,
-  posts
-});
+export default postsCtrl;
+// export default combineReducers({
+//   postsCtrl
+// });

@@ -38,13 +38,13 @@ export class ControlButtons extends React.Component {
           <DropdownMenu>
             <DropdownItem
               onClick={() => {
-                onSelect({ compareField: 'voteScore' });
-            }}>By vote score</DropdownItem>
+                onSelect('voteScore');
+              }}>By vote score</DropdownItem>
             <DropdownItem divider/>
             <DropdownItem
               onClick={() => {
-                onSelect({ compareField: 'timestamp' });
-            }}>By timestamp</DropdownItem>
+                onSelect('timestamp');
+              }}>By timestamp</DropdownItem>
           </DropdownMenu>
         </ButtonDropdown>
         <Button
