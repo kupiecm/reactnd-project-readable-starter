@@ -8,6 +8,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { ControlButtons } from './ControlButtons';
 
 import { loadPosts, addPost, removePost } from '../actions';
+import { compareFcn } from '../utils/helpers';
 
 import PostThumb from './PostThumb';
 
@@ -29,12 +30,6 @@ class CategoryView extends Component {
     }
   }
 
-  compareFcn = (field, reverse) => {
-    return function (a, b) {
-      return reverse ? a[field] - b[field] : b[field] - a[field];
-    };
-  };
-
   filterBy = (compareField) => {
     this.setState({ compareField });
   };
@@ -44,17 +39,21 @@ class CategoryView extends Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props);
-    this.setState(() => ({ fetchingData: true }));
-    API.getPosts().then((posts) => {
-      this.props.loadPosts(posts);
-      this.setState(() => ({ fetchingData: false }));
-    });
 
-    API.getCategories().then((categories) => {
-      categories = [{ name: 'all', path: 'all' }, ...categories];
-      this.setState({ categories });
-    });
+    this.setState(() => ({ fetchingData: true }));
+    API
+      .getPosts()
+      .then((posts) => {
+        this.props.loadPosts(posts);
+        this.setState(() => ({ fetchingData: false }));
+      });
+
+    API
+      .getCategories()
+      .then((categories) => {
+        categories = [{ name: 'all', path: 'all' }, ...categories];
+        this.setState({ categories });
+      });
   };
 
   render () {
@@ -96,7 +95,7 @@ class CategoryView extends Component {
                 <div className="col">
                   {posts && posts
                     .filter(post => category.name === 'all' || post.category === category.name)
-                    .sort(this.compareFcn(compareField, reverseOrder))
+                    .sort(compareFcn(compareField, reverseOrder))
                     .map(post => (
                       <PostThumb key={post.id} post={post}/>
                     ))}

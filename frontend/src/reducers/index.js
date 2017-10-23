@@ -11,7 +11,6 @@ function postsCtrl (state = { posts: [], selectedPost: {} }, action) {
 
   const { id, timestamp, title, body, author, category, voteScore, deleted } = action.post ? action.post : {};
 
-  console.log(action);
   switch (action.type) {
     case LOAD_POSTS:
       return {
