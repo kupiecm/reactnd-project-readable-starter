@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 export class ControlButtons extends React.Component {
@@ -23,11 +24,12 @@ export class ControlButtons extends React.Component {
 
     return (
       <div className="col text-right">
-        <Button
-          color="success"
-          onClick={() => {
-          }}>Add a post
-        </Button>
+        <Link to={`/edit/a`}>
+          <Button
+            color="success">
+            Add a post
+          </Button>
+        </Link>
         <ButtonDropdown
           className="btn-order"
           isOpen={this.state.dropdownOpen}

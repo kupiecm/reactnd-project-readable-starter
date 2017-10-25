@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Card, Button, CardTitle, CardText } from 'reactstrap';
 
-import { selectPost } from '../actions';
 import { trim } from '../utils/helpers';
 
 class PostThumb extends Component {
@@ -20,10 +19,7 @@ class PostThumb extends Component {
           <CardText>{trim(post.body)}</CardText>
           <div>
             <Link
-              to={`/post/${post.id}`}
-              onClick={() => {
-                this.props.dispatch(selectPost(post));
-              }}>
+              to={`/post/${post.id}`}>
               <Button color="info" className="col-4">More</Button>
             </Link>
           </div>

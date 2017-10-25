@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+
 import * as API from '../utils/api';
 
 import Loading from 'react-loading'
@@ -7,7 +9,7 @@ import classnames from 'classnames';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { ControlButtons } from './ControlButtons';
 
-import { loadPosts, addPost, removePost } from '../actions';
+import { loadPosts, loadCategories } from '../actions';
 import { compareFcn } from '../utils/helpers';
 
 import PostThumb from './PostThumb';
@@ -16,7 +18,6 @@ class CategoryView extends Component {
 
   state = {
     activeTab: 'all',
-    categories: [],
     compareField: 'voteScore',
     reverseOrder: false,
     fetchingData: false
@@ -38,28 +39,29 @@ class CategoryView extends Component {
     this.setState(() => ({ reverseOrder: !this.state.reverseOrder }));
   };
 
-  componentDidMount = () => {
-
-    this.setState(() => ({ fetchingData: true }));
-    API
-      .getPosts()
-      .then((posts) => {
-        this.props.loadPosts(posts);
-        this.setState(() => ({ fetchingData: false }));
-      });
-
-    API
-      .getCategories()
-      .then((categories) => {
-        categories = [{ name: 'all', path: 'all' }, ...categories];
-        this.setState({ categories });
-      });
-  };
+  // componentDidMount () {
+  //
+  //   const { loadPosts, loadCategories } = this.props;
+  //
+  //   this.setState(() => ({ fetchingData: true }));
+  //   API
+  //     .getCategories()
+  //     .then(categories => {
+  //       categories = [{ name: 'all', path: 'all' }, ...categories];
+  //       this.props.dispatch.loadCategories(categories);
+  //     });
+  //   API
+  //     .getPosts()
+  //     .then(posts => {
+  //       this.props.dispatch.loadPosts(posts);
+  //       this.setState(() => ({ fetchingData: false }));
+  //     });
+  // };
 
   render () {
 
-    const { activeTab, fetchingData, compareField, reverseOrder, categories } = this.state;
-    const { posts } = this.props;
+    const { activeTab, fetchingData, compareField, reverseOrder } = this.state;
+    const { posts, categories } = this.props;
 
     return (
 
@@ -109,13 +111,19 @@ class CategoryView extends Component {
   }
 }
 
-function mapStateToProps (postsCtrl) {
-  return { posts: postsCtrl.posts }
+function mapStateToProps ({ postsCtrl, categoriesCtrl }) {
+  return {
+    posts: postsCtrl.posts,
+    categories: categoriesCtrl.categories
+  }
 }
 
-function mapDispatchToProps (dispatch) {
-  return { loadPosts: (data) => dispatch(loadPosts(data)) }
-}
+// function mapDispatchToProps (dispatch) {
+//   return {
+//     loadPosts: (data) => dispatch(loadPosts(data)),
+//     loadCategories: (data) => dispatch(loadCategories(data))
+//   }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryView);
+export default connect(mapStateToProps)(CategoryView);
 

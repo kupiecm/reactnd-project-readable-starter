@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
+import Loading from 'react-loading';
 
 import * as API from '../utils/api';
-import { timestampToHuman, compareFcn } from '../utils/helpers';
+import { compareFcn } from '../utils/helpers';
 
-import { Button } from 'reactstrap';
+import Comment from './Comment';
 import AddComment from './AddComment';
 
 export default class Comments extends Component {
 
   state = {
-    comments: []
+    comments: [],
+    fetchingData: false
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-
+  componentDidMount () {
     const { parentId } = this.props;
-    prevProps !== this.props && // update state only when new props are sent
+    this.setState({ fetchingData: true });
     API
       .getComments(parentId)
       .then(comments => {
-        this.setState({ comments });
+        this.setState({
+          comments: comments,
+          fetchingData: false
+        });
       });
   };
 
@@ -63,51 +67,28 @@ export default class Comments extends Component {
 
   render () {
 
-    const { comments } = this.state;
+    const { comments, fetchingData } = this.state;
     let compareField = 'voteScore';
 
     return (
       <div>
-        <section>
-          <AddComment
-            addComment={this.add}
-          />
-        </section>
-
+        <AddComment addComment={this.add}/>
         <div className="separator-50"></div>
 
-        {comments && comments.length > 0 &&
-        <section className="col comments-section">
-          {
-            comments
-              .sort(compareFcn(compareField, false))
-              .map(comment => (
-                <div key={comment.id} className="row">
-                  <div className="col-sm-10">
-                    <small className="text-muted">@{comment.author}</small>
-                    <small className="text-muted"
-                           style={{ marginLeft: '10px' }}>{timestampToHuman(comment.timestamp)}</small>
-                  </div>
-                  <div className="col-sm-2 text-right">
-                    <Button outline className="btn-comment"
-                            onClick={() => {
-                              this.vote(comment.id, 'upVote');
-                            }}>
-                      <i className="fa fa-plus"></i>
-                    </Button>
-                    <span className="text-muted comment-score">{comment.voteScore}</span>
-                    <Button outline className="btn-comment"
-                            onClick={() => {
-                              this.vote(comment.id, 'downVote');
-                            }}>
-                      <i className="fa fa-minus"></i>
-                    </Button>
-                  </div>
-                  <div className="col">{comment.body}</div>
-                </div>
-              ))
-          }
-        </section>
+        {fetchingData
+          ? <Loading delay={200} type='spin' color='#222' className='loading'/>
+          : <div>
+            {comments && comments.length > 0 &&
+            <div className="col comments-section">
+              {comments
+                .sort(compareFcn(compareField, false))
+                .map(c => (
+                  <Comment key={c.id} comment={c} vote={this.vote}/>
+                ))
+              }
+            </div>
+            }
+          </div>
         }
         <div className="separator-50"></div>
       </div>

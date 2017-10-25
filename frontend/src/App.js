@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 import './App.css';
 import 'font-awesome/css/font-awesome.min.css';
 
-import Header from './components/Header';
-import CategoryView from './components/CategoryView';
-import PostView from './components/PostView';
+import Root from './components/Root';
+import reducer from './reducers';
 
-class App extends Component {
+let store = createStore(reducer);
 
-  render () {
-    return (
-      <div className="App">
-        <Header />
-        <Route exact path="/" component={CategoryView}/>
-        <Route path="/post/:id" component={PostView}/>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <Provider store={store}>
+    <Root/>
+  </Provider>
+);
+
+// class App extends Component {
+//
+//   render () {
+//     return (
+//
+//     );
+//   }
+// }
 
 export default App;
