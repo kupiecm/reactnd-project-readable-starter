@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Loading from 'react-loading';
 
+import * as ACTION from '../actions/index';
 import * as API from '../utils/api';
 import { compareFcn } from '../utils/helpers';
 
 import Comment from './Comment';
 import AddComment from './AddComment';
 
-export default class Comments extends Component {
+class Comments extends Component {
 
   state = {
-    comments: [],
     fetchingData: false
   };
 
@@ -20,59 +21,21 @@ export default class Comments extends Component {
     API
       .getComments(parentId)
       .then(comments => {
-        this.setState({
-          comments: comments,
-          fetchingData: false
-        });
+        this.props.dispatch(ACTION.loadComments(comments));
+        this.setState({ fetchingData: false });
       });
   };
 
-  add = (data) => {
-
-    const { parentId } = this.props;
-    data = {
-      ...data,
-      parentId: parentId
-    };
-
-    return new Promise(res => {
-      API
-        .addComment(data)
-        .then(comment => {
-          this.setState(state => ({
-            ...state,
-            comments: [...state.comments, comment]
-          }));
-          res();
-        });
-    });
-
-  };
-
-  vote = (id, option) => {
-    API
-      .voteOnComment(id, option)
-      .then(comment => {
-        this.setState(state => ({
-          ...state,
-          comments: state.comments.map(c => {
-            if (c.id === comment.id) {
-              c.voteScore = comment.voteScore;
-            }
-            return c;
-          })
-        }));
-      })
-  };
 
   render () {
 
-    const { comments, fetchingData } = this.state;
+    const { fetchingData } = this.state;
+    const { parentId, comments } = this.props;
     let compareField = 'voteScore';
 
     return (
       <div>
-        <AddComment addComment={this.add}/>
+        <AddComment parentId={parentId}/>
         <div className="separator-50"></div>
 
         {fetchingData
@@ -83,7 +46,7 @@ export default class Comments extends Component {
               {comments
                 .sort(compareFcn(compareField, false))
                 .map(c => (
-                  <Comment key={c.id} comment={c} vote={this.vote}/>
+                  <Comment key={c.id} comment={c}/>
                 ))
               }
             </div>
@@ -95,3 +58,12 @@ export default class Comments extends Component {
     );
   }
 }
+
+function mapStateToProps (state, ownProps) {
+  return {
+    comments: state.commentsCtrl.comments,
+    parentId: ownProps.parentId
+  };
+}
+
+export default connect(mapStateToProps)(Comments);

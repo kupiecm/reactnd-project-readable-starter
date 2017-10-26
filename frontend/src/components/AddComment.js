@@ -1,41 +1,70 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Form, FormGroup, Input, Button } from 'reactstrap';
 
 import * as API from '../utils/api';
+import * as ACTION from '../actions/index';
 
-import { Form, FormGroup, Input, Button } from 'reactstrap';
 import uuid from 'uuid';
 
-export default class AddComponent extends Component {
+class AddComment extends Component {
 
   state = {
     author: '',
     body: ''
   };
 
+  componentDidUpdate (prevProps) {
+    const { selectedComment } = this.props;
+    if (prevProps.selectedComment !== selectedComment)
+      this.setState({
+        author: selectedComment ? selectedComment.author : '',
+        body: selectedComment ? selectedComment.body : ''
+      });
+  };
+
   handleChange (e) {
     e.preventDefault();
     this.setState({ [e.target.id]: e.target.value })
-  }
+  };
 
   handleSubmit (e) {
-    const { addComment } = this.props;
+    const { parentId, selectedComment } = this.props;
     e.preventDefault();
+
+    if (selectedComment) {
+      let editedComment = {
+        ...selectedComment,
+        timestamp: (new Date()).getTime(),
+        body: this.state.body,
+      };
+      API
+        .editComment(editedComment)
+        .then(() => {
+          this.props.dispatch(ACTION.editComment(editedComment));
+        });
+      return;
+    }
 
     let data = {
       id: uuid.v4(),
+      parentId: parentId,
       timestamp: (new Date()).getTime(),
       body: this.state.body,
       author: this.state.author
     };
 
-    addComment(data)
-      .then(() => {
+    API
+      .addComment(data)
+      .then(comment => {
+        this.props.dispatch(ACTION.addComment(comment));
         this.setState({ author: '', body: '' });
       });
   };
 
   render () {
 
+    const { selectedComment } = this.props;
     return (
       <div className="col add-comment-form">
         <Form onSubmit={this.handleSubmit.bind(this)}>
@@ -61,6 +90,7 @@ export default class AddComponent extends Component {
                 type="text"
                 name="author"
                 id="author"
+                disabled={selectedComment}
                 placeholder="Enter your nickname..."
                 value={this.state.author}
                 onChange={this.handleChange.bind(this)}/>
@@ -74,3 +104,12 @@ export default class AddComponent extends Component {
     )
   }
 }
+
+function mapStateToProps (state, ownProps) {
+  return {
+    selectedComment: state.commentsCtrl.selectedComment,
+    parentId: ownProps.parentId
+  };
+}
+
+export default connect(mapStateToProps)(AddComment);

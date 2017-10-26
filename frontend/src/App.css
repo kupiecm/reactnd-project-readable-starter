@@ -95,6 +95,19 @@
   margin-top: 0.2rem;
 }
 
+.btn-comment-edit {
+  font-size: 0.85rem;
+  background-color: inherit !important;
+  color: inherit !important;
+  border: none !important;
+  padding: 0 0.8rem !important;
+}
+
+.btn-comment-edit:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
 @media (max-width: 992px) {
 
 }

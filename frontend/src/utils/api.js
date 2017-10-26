@@ -54,6 +54,31 @@ export function addComment(data) {
   })
     .then(res => res.json());
 }
+
+export function removeComment(id) {
+  return fetch(`http://localhost:3001/comments/${id}`, {
+    headers: {
+      'Authorization': 'let-me-in',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    method: 'DELETE'
+  })
+    .then(res => res.json());
+}
+
+export function editComment(data) {
+  console.log(data.id);
+  return fetch(`http://localhost:3001/comments/${data.id}`, {
+    headers: {
+      'Authorization': 'let-me-in',
+      'Content-Type': 'application/json'
+    },
+    method: 'PUT',
+    body: JSON.stringify(data)
+  })
+    .then(res => res.json());
+}
+
 export function voteOnComment (id, option) {
   return fetch(`http://localhost:3001/comments/${id}`, {
     headers: {

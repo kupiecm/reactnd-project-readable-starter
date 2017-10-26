@@ -5,6 +5,11 @@ import {
   ADD_POST,
   REMOVE_POST,
   EDIT_POST,
+  LOAD_COMMENTS,
+  SELECT_COMMENT,
+  ADD_COMMENT,
+  REMOVE_COMMENT,
+  EDIT_COMMENT,
   LOAD_CATEGORIES,
   ADD_CATEGORY
 } from "../actions";
@@ -53,6 +58,44 @@ function postsCtrl (state = { posts: [], selectedPost: null }, action) {
   }
 }
 
+function commentsCtrl (state = {comments: [], selectedComment: null}, action) {
+  switch (action.type) {
+    case LOAD_COMMENTS:
+      return {
+        ...state,
+        comments: action.comments ? action.comments : []
+      };
+    case SELECT_COMMENT:
+      return {
+        ...state,
+        selectedComment: action.comment
+      };
+    case ADD_COMMENT:
+      return {
+        ...state,
+        comments: [...state.comments, action.comment]
+      };
+    case EDIT_COMMENT:
+      return {
+        ...state,
+        selectedComment: null,
+        comments: state.comments.map(c => {
+          if (c.id === action.comment.id) {
+            c = Object.assign({}, action.comment);
+          }
+          return c;
+        })
+      };
+    case REMOVE_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.filter(c => c.id !== action.id)
+      };
+    default:
+      return state;
+  }
+}
+
 function categoriesCtrl (state = { categories: [] }, action) {
 
   switch (action.type) {
@@ -65,8 +108,7 @@ function categoriesCtrl (state = { categories: [] }, action) {
       return {};
     default:
       return state;
-
   }
 }
 
-export default combineReducers({ postsCtrl, categoriesCtrl });
+export default combineReducers({ postsCtrl, commentsCtrl, categoriesCtrl });

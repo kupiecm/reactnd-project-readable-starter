@@ -24,7 +24,7 @@ class PostCtrlBtns extends Component {
 
   render () {
     return (
-      <div className="row text-right post-controls">
+      <div id="edit-ctrls" className="row text-right post-controls">
         <div className="col">
           <Button
             outline
