@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 import * as ACTION from '../actions';
 import * as API from '../utils/api';
@@ -23,15 +24,17 @@ class PostCtrlBtns extends Component {
   };
 
   render () {
+    const { selectedPost } = this.props;
     return (
       <div id="edit-ctrls" className="row text-right post-controls">
         <div className="col">
-          <Button
-            outline
-            color="info"
-            onClick={this.edit}>
-            <i className="fa fa-edit"></i>
-          </Button>
+          <Link to={`/edit/${selectedPost.id}`}>
+            <Button
+              outline
+              color="info">
+              <i className="fa fa-edit"></i>
+            </Button>
+          </Link>
           <Button
             outline
             color="info"

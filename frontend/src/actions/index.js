@@ -25,18 +25,9 @@ export const selectPost = (post) => ({
   post: post
 });
 
-export const addPost = ({ title, body, author, category }) => ({
+export const addPost = (post) => ({
   type: ADD_POST,
-  post: {
-    id: uuid.v4(),
-    timestamp: (new Date).getTime(),
-    title: title,
-    body: body,
-    author: author,
-    category: category,
-    voteScore: 0,
-    deleted: false
-  }
+  post: post
 });
 
 export const removePost = ({ id }) => ({
@@ -44,15 +35,9 @@ export const removePost = ({ id }) => ({
   id: id
 });
 
-export const editPost = ({ id, title, body, author, category }) => ({
+export const editPost = (post) => ({
   type: EDIT_POST,
-  post: {
-    id: id,
-    title: title,
-    body: body,
-    author: author,
-    category: category,
-  }
+  post: post
 });
 
 export const loadComments = (c) => ({
@@ -67,11 +52,7 @@ export const selectComment = (c) => ({
 
 export const addComment = (comment) => ({
   type: ADD_COMMENT,
-  comment: {
-    ...comment,
-    voteScore: 0,
-    deleted: false
-  }
+  comment: comment
 });
 
 export const removeComment = ({ id }) => ({
@@ -88,3 +69,13 @@ export const loadCategories = (cat) => ({
   type: LOAD_CATEGORIES,
   categories: cat
 });
+
+export const vote = (item, type) => {
+
+  switch (type) {
+    case 'posts':
+      return editPost(item);
+    case 'comments':
+      return editComment(item);
+  }
+};

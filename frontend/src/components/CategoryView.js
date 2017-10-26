@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-
-import * as API from '../utils/api';
-
 import Loading from 'react-loading'
 import classnames from 'classnames';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { ControlButtons } from './ControlButtons';
 
-import { loadPosts, loadCategories } from '../actions';
 import { compareFcn } from '../utils/helpers';
 
 import PostThumb from './PostThumb';
@@ -39,24 +35,10 @@ class CategoryView extends Component {
     this.setState(() => ({ reverseOrder: !this.state.reverseOrder }));
   };
 
-  // componentDidMount () {
-  //
-  //   const { loadPosts, loadCategories } = this.props;
-  //
-  //   this.setState(() => ({ fetchingData: true }));
-  //   API
-  //     .getCategories()
-  //     .then(categories => {
-  //       categories = [{ name: 'all', path: 'all' }, ...categories];
-  //       this.props.dispatch.loadCategories(categories);
-  //     });
-  //   API
-  //     .getPosts()
-  //     .then(posts => {
-  //       this.props.dispatch.loadPosts(posts);
-  //       this.setState(() => ({ fetchingData: false }));
-  //     });
-  // };
+  componentDidUpdate(prevProps) {
+    if(prevProps !== this.props)
+      console.log(this.props);
+  };
 
   render () {
 

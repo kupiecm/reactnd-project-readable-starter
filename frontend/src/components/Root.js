@@ -35,6 +35,7 @@ class Root extends Component {
           <Header/>
           <Route exact path="/" component={CategoryView}/>
           <Route path="/post/:id" component={PostView}/>
+          <Route path="/add" component={AddEditPostView}/>
           <Route path="/edit/:id" component={AddEditPostView}/>
         </div>
       </Router>

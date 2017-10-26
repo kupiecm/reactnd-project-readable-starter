@@ -58,7 +58,7 @@
   padding-bottom: 5px;
 }
 .voteScore {
-  margin-left: 5px;
+  margin: 0.25rem;
 }
 
 .comments-section {
@@ -77,10 +77,6 @@
 
 .comments-section .row:last-child {
   border: none !important;
-}
-
-.comment-score {
-  margin: 0.25rem;
 }
 
 .add-comment-form {

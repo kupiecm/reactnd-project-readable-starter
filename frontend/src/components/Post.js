@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
+import Vote from './Vote';
 
 import { timestampToHuman } from '../utils/helpers';
 
@@ -9,15 +10,12 @@ const Post = ({ post }) => (
       <CardTitle>{post.title}</CardTitle>
       <CardSubtitle>
         <div className="row">
+          <Vote item={post} type="posts"/>
+        </div>
+        <div className="row">
           <div className="col"></div>
           <div className="col text-center">
             <small className="text-muted">@{post.author}</small>
-          </div>
-          <div className="col text-center">
-            <small className="text-muted">
-              <i className="fa fa-star" aria-hidden="true"></i>
-              <span className="voteScore">{post.voteScore}</span>
-            </small>
           </div>
           <div className="col text-center">
             <small className="text-muted">{timestampToHuman(post.timestamp)}</small>

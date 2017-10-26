@@ -16,8 +16,6 @@ import {
 
 function postsCtrl (state = { posts: [], selectedPost: null }, action) {
 
-  const { id, timestamp, title, body, author, category, voteScore, deleted } = action.post ? action.post : {};
-
   switch (action.type) {
     case LOAD_POSTS:
       return {
@@ -32,19 +30,8 @@ function postsCtrl (state = { posts: [], selectedPost: null }, action) {
     case ADD_POST:
       return {
         ...state,
-        posts: {
-          ...state.posts,
-          [id]: {
-            id,
-            timestamp,
-            title,
-            body,
-            author,
-            category,
-            voteScore,
-            deleted
-          }
-        }
+        selectedPost: null,
+        posts: [...state.posts, action.post]
       };
     case REMOVE_POST:
       return {
@@ -52,7 +39,17 @@ function postsCtrl (state = { posts: [], selectedPost: null }, action) {
         posts: state.posts.filter(post => post.id !== action.id)
       };
     case EDIT_POST:
-      return {};
+      console.log(action.post);
+      return {
+        ...state,
+        selectedPost: action.post,
+        posts: state.posts.map(p => {
+          if (p.id === action.post.id) {
+            p = Object.assign({}, action.post);
+          }
+          return p;
+        })
+      };
     default:
       return state;
   }

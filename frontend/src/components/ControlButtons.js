@@ -24,7 +24,7 @@ export class ControlButtons extends React.Component {
 
     return (
       <div className="col text-right">
-        <Link to={`/edit/a`}>
+        <Link to={`/add`}>
           <Button
             color="success">
             Add a post

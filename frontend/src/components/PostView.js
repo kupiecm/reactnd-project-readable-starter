@@ -19,18 +19,22 @@ class PostView extends Component {
   componentDidMount () {
 
     const { id } = this.props.match.params;
-    const { dispatch } = this.props;
+    const { selectedPost, dispatch } = this.props;
 
-    this.setState({ fetchingData: true });
-    API
-      .getPost(id)
-      .then(post => {
-        dispatch(selectPost(post));
-        this.setState({ fetchingData: false });
-      })
-      .catch(() => {
-        this.setState({ fetchingData: false });
-      });
+    if (!selectedPost) {
+      // fetch post when user directly puts post id in url, without first visiting main view
+      this.setState({ fetchingData: true });
+      API
+        .getPost(id)
+        .then(post => {
+          dispatch(selectPost(post));
+          this.setState({ fetchingData: false });
+        })
+        .catch(() => {
+          this.setState({ fetchingData: false });
+        });
+    }
+    // otherwise, post is already selected in store and no need to make an extra API call
   };
 
   render () {
@@ -63,8 +67,9 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps ({ postsCtrl, categoriesCtrl }) {
-  return { post: postsCtrl.selectedPost };
+function mapStateToProps (state) {
+  const { selectedPost } = state.postsCtrl;
+  return { post: selectedPost };
 }
 
 export default connect(mapStateToProps)(PostView);
