@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Start the application
 
 ```shell
-    $ git clone https://github.com/eustachy/reactnd-project-myreads-starter.git
+    $ git clone https://github.com/kupiecm/reactnd-project-readable-starter.git
 ```
 #### Install and start the API server:
 ```shell
