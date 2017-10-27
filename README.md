@@ -1,22 +1,40 @@
-# Readable API Server
+# Readable UDACITY Project
 
-This is the starter project for the final assessment project for Udacity's Redux course where you will build a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+This is a project of a content and comment web app. Users are able to browse articles of predefined categories, publish 
+new articles and comment them. It is also possible to edit and remove both posts and comments.
 
-This repository includes the code for the backend API Server that you'll use to develop and interact with the front-end portion of the project.
+## Getting started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Start Developing
+### Start the application
 
-To get started developing right away:
+```shell
+    $ git clone https://github.com/eustachy/reactnd-project-myreads-starter.git
+```
+#### Install and start the API server:
+```shell
+    $ cd api-server
+    $ npm install
+    $ node server
+```
+#### In another terminal window,
+```shell
+    $ cd frontend
+    $ npm instal`
+    $ npm start
+```
+Then, navigate to http://localhost:3000/
 
-* Install and start the API server
-    - `cd api-server`
-    - `npm install`
-    - `node server`
-* In another terminal window, use Create React App to scaffold out the front-end
-    - `create-react-app frontend`
-    - `cd frontend`
-    - `npm start`
+## Contribution
+First of all, thanks for thinking of contributing to this project!
 
-## API Server
+###  Ways to Contribute
 
-Information about the API server and how to use it can be found in its [README file](api-server/README.md).
+* Improve documentation
+* Fix a bug
+* Implement a new feature
+* Discuss potential ways to improve project
+* Improve existing implementation, performance, etc.
+
+## License
+MIT
