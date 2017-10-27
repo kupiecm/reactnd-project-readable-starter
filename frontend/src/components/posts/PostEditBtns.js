@@ -3,32 +3,21 @@ import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-import * as ACTION from '../actions';
-import * as API from '../utils/api';
+import { removePost } from '../../actions/index';
 
-class PostCtrlBtns extends Component {
-
-  edit = () => {
-    const { dispatch } = this.props;
-  };
+class PostEditBtns extends Component {
 
   remove = () => {
-    const { selectedPost, dispatch } = this.props;
-
-    API
-      .removePost(selectedPost.id)
-      .then(post => {
-        dispatch(ACTION.removePost(post));
-        dispatch(ACTION.selectPost(null));
-      });
+    const { id, dispatch } = this.props;
+    dispatch(removePost(id));
   };
 
   render () {
-    const { selectedPost } = this.props;
+    const { id } = this.props;
     return (
       <div id="edit-ctrls" className="row text-right post-controls">
         <div className="col">
-          <Link to={`/edit/${selectedPost.id}`}>
+          <Link to={`/edit/${id}`}>
             <Button
               outline
               color="info">
@@ -48,8 +37,8 @@ class PostCtrlBtns extends Component {
   }
 }
 
-function mapStateToProps ({ postsCtrl, categoriesCtrl }) {
-  return { selectedPost: postsCtrl.selectedPost };
+function mapStateToProps (state, ownProps) {
+  return { id: ownProps.id };
 }
 
-export default connect(mapStateToProps)(PostCtrlBtns);
+export default connect(mapStateToProps)(PostEditBtns);

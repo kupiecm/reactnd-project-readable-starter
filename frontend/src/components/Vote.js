@@ -2,18 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 
-import * as API from '../utils/api';
-import * as ACTION from '../actions/index';
+import { vote } from '../actions';
 
 class Vote extends Component {
 
   vote (option) {
     const { item, type, dispatch } = this.props;
-    API
-      .vote(item.id, option, type)
-      .then(comment => {
-        dispatch(ACTION.vote(comment, type));
-      });
+    dispatch(vote(item, option, type));
   };
 
   render () {
@@ -40,7 +35,7 @@ class Vote extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps (state, ownProps) {
   return {
     item: ownProps.item,
     type: ownProps.type

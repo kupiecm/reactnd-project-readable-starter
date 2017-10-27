@@ -1,16 +1,25 @@
 import React from 'react';
-import { Button, Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
-import Vote from './Vote';
+import { Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
 
-import { timestampToHuman } from '../utils/helpers';
+import Vote from '../Vote';
 
-const Post = ({ post }) => (
+import { timestampToHuman } from '../../utils/helpers';
+
+const Post = ({ post, comments }) => (
   <Card body outline color="info" className="text-center">
     <CardBody>
       <CardTitle>{post.title}</CardTitle>
       <CardSubtitle>
         <div className="row">
-          <Vote item={post} type="posts"/>
+          <div className="col">
+            <Vote item={post} type="posts"/>
+          </div>
+          <div className="col text-center">
+            <small className="text-muted">
+              <i className="fa fa-comment" aria-hidden="true"></i>
+              <span className="voteScore">{comments ? comments.length : 0}</span>
+            </small>
+          </div>
         </div>
         <div className="row">
           <div className="col"></div>

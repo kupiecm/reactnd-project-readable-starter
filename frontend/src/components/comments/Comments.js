@@ -2,48 +2,28 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'react-loading';
 
-import * as ACTION from '../actions/index';
-import * as API from '../utils/api';
-import { compareFcn } from '../utils/helpers';
+import { compareFcn } from '../../utils/helpers';
 
 import Comment from './Comment';
-import AddComment from './AddComment';
+import CommentInput from './CommentInput';
 
 class Comments extends Component {
 
-  state = {
-    fetchingData: false
-  };
-
-  componentDidMount () {
-    const { parentId } = this.props;
-    this.setState({ fetchingData: true });
-    API
-      .getComments(parentId)
-      .then(comments => {
-        this.props.dispatch(ACTION.loadComments(comments));
-        this.setState({ fetchingData: false });
-      });
-  };
-
-
   render () {
 
-    const { fetchingData } = this.state;
-    const { parentId, comments } = this.props;
+    const { parentId, comments, isFetching } = this.props;
     let compareField = 'voteScore';
-
     return (
       <div>
-        <AddComment parentId={parentId}/>
+        <CommentInput parentId={parentId}/>
         <div className="separator-50"></div>
 
-        {fetchingData
+        {isFetching
           ? <Loading delay={200} type='spin' color='#222' className='loading'/>
           : <div>
-            {comments && comments.length > 0 &&
+            {comments[parentId] && comments[parentId].length > 0 &&
             <div className="col comments-section">
-              {comments
+              {comments[parentId]
                 .sort(compareFcn(compareField, false))
                 .map(c => (
                   <Comment key={c.id} comment={c}/>
@@ -61,7 +41,8 @@ class Comments extends Component {
 
 function mapStateToProps (state, ownProps) {
   return {
-    comments: state.commentsCtrl.comments,
+    comments: state.comments.items,
+    isFetching: state.comments.isFetching,
     parentId: ownProps.parentId
   };
 }

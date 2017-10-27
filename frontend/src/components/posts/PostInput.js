@@ -4,19 +4,15 @@ import Loading from 'react-loading'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 import uuid from 'uuid';
+import { addPost, editPost } from '../../actions/index';
 
-import * as API from '../utils/api';
-import * as ACTION from '../actions';
-
-class AddEditPostView extends Component {
+class PostInput extends Component {
 
   state = {
     title: '',
     author: '',
     body: '',
-    timestamp: '',
-    category: '',
-    fetchingData: false
+    category: ''
   };
 
   componentWillMount () {
@@ -43,36 +39,19 @@ class AddEditPostView extends Component {
   };
 
   add = () => {
-    const { title, author, body, category } = this.state;
-    let newPost = { title, author, body, category };
+    let newPost = this.state;
     newPost['id'] = uuid.v4();
     newPost['timestamp'] = (new Date()).getTime();
-
-    this.setState({ fetchingData: true });
-    API
-      .addPost(newPost)
-      .then(post => {
-        this.props.dispatch(ACTION.addPost(post));
-        this.reset();
-        this.setState({ fetchingData: false });
-      });
+    this.props.dispatch(addPost(newPost)).then(this.reset);
   };
 
   edit = () => {
     const { title, body } = this.state;
-    let { selectedPost } = this.props;
+    let { selectedPost, dispatch } = this.props;
     selectedPost.title = title;
     selectedPost.body = body;
-    selectedPost.timestamp = (new Date()).getTime();
-
-    this.setState({ fetchingData: true });
-    API
-      .editPost(selectedPost)
-      .then(post => {
-        this.props.dispatch(ACTION.editPost(post));
-        this.reset();
-        this.setState({ fetchingData: false });
-      });
+    selectedPost.timestamp = (new Date().getTime());
+    dispatch(editPost(selectedPost)).then(this.reset);
   };
 
   reset = () => {
@@ -86,17 +65,20 @@ class AddEditPostView extends Component {
   };
 
   render () {
-
-    const { fetchingData } = this.state;
-    const { selectedPost, categories } = this.props;
+    const { selectedPost, categories, isFetching } = this.props;
     return (
 
       <section className="container">
-        {fetchingData
+        {isFetching
           ? <Loading delay={200} type='spin' color='#222' className='loading'/>
           : <div>
             <div className="separator-50"></div>
-            <h2 className="text-center text-muted">Add a new post</h2>
+            <h2 className="text-center text-muted">
+              {selectedPost
+                ? <span>Edit a post</span>
+                : <span>Add a new post</span>
+              }
+            </h2>
             <div className="separator-50"></div>
             <div className="col add-comment-form">
               <Form onSubmit={this.handleSubmit.bind(this)}>
@@ -154,7 +136,12 @@ class AddEditPostView extends Component {
                   <div className="separator-50"></div>
                   <div className="row">
                     <div className="col">
-                      <Button color="info" className="col">Submit</Button>
+                      <Button
+                        color="info"
+                        className="col"
+                        disabled={this.state.author === '' || this.state.category === ''
+                        || this.state.body === '' || this.state.title === ''}
+                      >Submit</Button>
                     </div>
                   </div>
                 </FormGroup>
@@ -167,12 +154,13 @@ class AddEditPostView extends Component {
   }
 }
 
-function mapStateToProps ({ postsCtrl, categoriesCtrl }) {
+function mapStateToProps ({ posts, categories }) {
   return {
-    posts: postsCtrl.posts,
-    selectedPost: postsCtrl.selectedPost,
-    categories: categoriesCtrl.categories
+    posts: posts.items,
+    selectedPost: posts.selectedPost,
+    isFetching: posts.isFetching,
+    categories: categories.items
   }
 }
 
-export default connect(mapStateToProps)(AddEditPostView);
+export default connect(mapStateToProps)(PostInput);

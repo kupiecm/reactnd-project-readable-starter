@@ -2,32 +2,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import ToolTipItem from './ToolTipItem';
-import Vote from './Vote';
+import Vote from '../Vote';
 
-import { timestampToHuman } from '../utils/helpers';
-import * as API from '../utils/api';
-import * as ACTION from '../actions/index';
+import { removeComment, selectComment } from '../../actions/index';
+import { timestampToHuman } from '../../utils/helpers';
+
 
 class Comment extends Component {
 
   remove = () => {
-    const { comment } = this.props;
-
-    API
-      .removeComment(comment.id)
-      .then(() => {
-        this.props.dispatch(ACTION.removeComment(comment));
-      });
+    const { comment, dispatch } = this.props;
+    dispatch(removeComment(comment.id));
   };
 
   edit = () => {
-    const { comment } = this.props;
-    this.props.dispatch(ACTION.selectComment(comment));
+    const { comment, dispatch } = this.props;
+    dispatch(selectComment(comment));
   };
 
   render () {
     const { comment } = this.props;
-
+    console.log(comment);
     return (
       <div className="row">
         <div className="col-sm-10">

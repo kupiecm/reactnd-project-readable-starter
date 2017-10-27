@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
-  LOAD_POSTS,
+  RECEIVE_POSTS,
+  REQUEST_POSTS,
   SELECT_POST,
   ADD_POST,
   REMOVE_POST,
@@ -10,40 +11,46 @@ import {
   ADD_COMMENT,
   REMOVE_COMMENT,
   EDIT_COMMENT,
-  LOAD_CATEGORIES,
-  ADD_CATEGORY
+  LOAD_CATEGORIES
 } from "../actions";
 
-function postsCtrl (state = { posts: [], selectedPost: null }, action) {
+function posts (state = { items: [], selectedPost: null }, action) {
 
   switch (action.type) {
-    case LOAD_POSTS:
+    case RECEIVE_POSTS:
       return {
         ...state,
-        posts: action.posts ? action.posts : []
+        items: action.posts ? action.posts : [],
+        isFetching: false
+      };
+    case REQUEST_POSTS:
+      return {
+        ...state,
+        isFetching: true
       };
     case SELECT_POST:
       return {
         ...state,
-        selectedPost: action.post
+        selectedPost: action.post,
+        isFetching: false
       };
     case ADD_POST:
       return {
         ...state,
         selectedPost: null,
-        posts: [...state.posts, action.post]
+        items: [...state.items, action.post]
       };
     case REMOVE_POST:
       return {
         ...state,
-        posts: state.posts.filter(post => post.id !== action.id)
+        items: state.items.filter(post => post.id !== action.id),
+        selectedPost: null
       };
     case EDIT_POST:
-      console.log(action.post);
       return {
         ...state,
-        selectedPost: action.post,
-        posts: state.posts.map(p => {
+        selectedPost: null,
+        items: state.items.map(p => {
           if (p.id === action.post.id) {
             p = Object.assign({}, action.post);
           }
@@ -55,12 +62,15 @@ function postsCtrl (state = { posts: [], selectedPost: null }, action) {
   }
 }
 
-function commentsCtrl (state = {comments: [], selectedComment: null}, action) {
+function comments (state = { items: {}, selectedComment: null }, action) {
   switch (action.type) {
     case LOAD_COMMENTS:
       return {
         ...state,
-        comments: action.comments ? action.comments : []
+        items: {
+          ...state.items,
+          [action.parentId]: action.comments
+        }
       };
     case SELECT_COMMENT:
       return {
@@ -70,42 +80,51 @@ function commentsCtrl (state = {comments: [], selectedComment: null}, action) {
     case ADD_COMMENT:
       return {
         ...state,
-        comments: [...state.comments, action.comment]
+        items: {
+          ...state.items,
+          [action.comment.parentId]: state.items[action.comment.parentId]
+            ? [...state.items[action.comment.parentId], action.comment]
+            : [action.comment]
+        }
       };
     case EDIT_COMMENT:
       return {
         ...state,
         selectedComment: null,
-        comments: state.comments.map(c => {
-          if (c.id === action.comment.id) {
-            c = Object.assign({}, action.comment);
-          }
-          return c;
-        })
+        items: {
+          ...state.items,
+          [action.comment.parentId]: state.items[action.comment.parentId].map(c => {
+            if (c.id === action.comment.id) {
+              c = Object.assign({}, action.comment);
+            }
+            return c;
+          })
+        }
       };
     case REMOVE_COMMENT:
       return {
         ...state,
-        comments: state.comments.filter(c => c.id !== action.id)
+        items: {
+          ...state.items,
+          [action.parentId]: state.items[action.parentId].filter(c => c.id !== action.id)
+        }
       };
     default:
       return state;
   }
 }
 
-function categoriesCtrl (state = { categories: [] }, action) {
+function categories (state = { items: [] }, action) {
 
   switch (action.type) {
     case LOAD_CATEGORIES:
       return {
         ...state,
-        categories: action.categories ? action.categories : []
+        items: action.items ? action.items : []
       };
-    case ADD_CATEGORY:
-      return {};
     default:
       return state;
   }
 }
 
-export default combineReducers({ postsCtrl, commentsCtrl, categoriesCtrl });
+export default combineReducers({ posts, comments, categories });

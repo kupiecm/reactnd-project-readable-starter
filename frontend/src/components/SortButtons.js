@@ -1,16 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-export class ControlButtons extends React.Component {
-  constructor (props) {
-    super(props);
+import { selectPost } from '../actions';
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      dropdownOpen: false
-    };
-  }
+class SortButtons extends React.Component {
+  state = {
+    dropdownOpen: false
+  };
 
   toggle () {
     this.setState({
@@ -20,20 +18,21 @@ export class ControlButtons extends React.Component {
 
   render () {
 
-    const { onSelect, reverseOrder, changeOrder } = this.props;
+    const { onSelect, reverseOrder, changeOrder, dispatch } = this.props;
 
     return (
       <div className="col text-right">
         <Link to={`/add`}>
           <Button
-            color="success">
+            color="success"
+            onClick={() => dispatch(selectPost(null))}>
             Add a post
           </Button>
         </Link>
         <ButtonDropdown
           className="btn-order"
           isOpen={this.state.dropdownOpen}
-          toggle={this.toggle}>
+          toggle={this.toggle.bind(this)}>
           <DropdownToggle caret color="info">
             Sort
           </DropdownToggle>
@@ -62,3 +61,9 @@ export class ControlButtons extends React.Component {
     );
   }
 }
+
+function mapStateToProps (state, ownProps) {
+  return { ownProps };
+}
+
+export default connect(mapStateToProps)(SortButtons);

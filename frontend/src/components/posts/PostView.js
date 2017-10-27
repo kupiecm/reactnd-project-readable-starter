@@ -2,48 +2,33 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loading from 'react-loading';
 
-import { selectPost } from '../actions';
-import * as API from '../utils/api';
+import { fetchPost } from '../../actions/index';
 
-import PostCtrlBtns from './PostCtrlBtns';
+import PostEditBtns from './PostEditBtns';
 import Post from './Post';
-import Comments from './Comments';
+import Comments from '../comments/Comments';
 
 
 class PostView extends Component {
 
-  state = {
-    fetchingData: false
-  };
-
-  componentDidMount () {
+  componentWillMount () {
 
     const { id } = this.props.match.params;
     const { selectedPost, dispatch } = this.props;
 
     if (!selectedPost) {
       // fetch post when user directly puts post id in url, without first visiting main view
-      this.setState({ fetchingData: true });
-      API
-        .getPost(id)
-        .then(post => {
-          dispatch(selectPost(post));
-          this.setState({ fetchingData: false });
-        })
-        .catch(() => {
-          this.setState({ fetchingData: false });
-        });
+      dispatch(fetchPost(id));
     }
     // otherwise, post is already selected in store and no need to make an extra API call
   };
 
   render () {
-    const { fetchingData } = this.state;
-    const { post } = this.props;
+    const { post, comments, isFetching } = this.props;
     return (
 
       <div className="container">
-        {fetchingData ?
+        {isFetching ?
           <Loading delay={200} type='spin' color='#222' className='loading'/>
           :
           <div>
@@ -54,8 +39,8 @@ class PostView extends Component {
               </div>
               :
               <div>
-                <PostCtrlBtns id={post.id}/>
-                <Post post={post}/>
+                <PostEditBtns id={post.id}/>
+                <Post post={post} comments={comments[post.id]}/>
                 <div className="separator-50"></div>
                 <Comments parentId={post.id}/>
               </div>
@@ -67,9 +52,12 @@ class PostView extends Component {
   }
 }
 
-function mapStateToProps (state) {
-  const { selectedPost } = state.postsCtrl;
-  return { post: selectedPost };
+function mapStateToProps ({ posts, comments }) {
+  return {
+    post: posts.selectedPost,
+    isFetching: posts.isFetching,
+    comments: comments.items,
+  };
 }
 
 export default connect(mapStateToProps)(PostView);

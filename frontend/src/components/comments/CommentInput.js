@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, FormGroup, Input, Button } from 'reactstrap';
 
-import * as API from '../utils/api';
-import * as ACTION from '../actions/index';
-
+import { addComment, editComment } from '../../actions/index';
 import uuid from 'uuid';
 
-class AddComment extends Component {
+class CommentInput extends Component {
 
   state = {
     author: '',
@@ -29,7 +27,7 @@ class AddComment extends Component {
   };
 
   handleSubmit (e) {
-    const { parentId, selectedComment } = this.props;
+    const { parentId, selectedComment, dispatch } = this.props;
     e.preventDefault();
 
     if (selectedComment) {
@@ -38,15 +36,12 @@ class AddComment extends Component {
         timestamp: (new Date()).getTime(),
         body: this.state.body,
       };
-      API
-        .editComment(editedComment)
-        .then(() => {
-          this.props.dispatch(ACTION.editComment(editedComment));
-        });
+      dispatch(editComment(editedComment))
+        .then(() => this.setState({ author: '', body: '' }));
       return;
     }
 
-    let data = {
+    let newComment = {
       id: uuid.v4(),
       parentId: parentId,
       timestamp: (new Date()).getTime(),
@@ -54,12 +49,8 @@ class AddComment extends Component {
       author: this.state.author
     };
 
-    API
-      .addComment(data)
-      .then(comment => {
-        this.props.dispatch(ACTION.addComment(comment));
-        this.setState({ author: '', body: '' });
-      });
+    dispatch(addComment(newComment))
+      .then(() => this.setState({ author: '', body: '' }));
   };
 
   render () {
@@ -107,9 +98,9 @@ class AddComment extends Component {
 
 function mapStateToProps (state, ownProps) {
   return {
-    selectedComment: state.commentsCtrl.selectedComment,
+    selectedComment: state.comments.selectedComment,
     parentId: ownProps.parentId
   };
 }
 
-export default connect(mapStateToProps)(AddComment);
+export default connect(mapStateToProps)(CommentInput);

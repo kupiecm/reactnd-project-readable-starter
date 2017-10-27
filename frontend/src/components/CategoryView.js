@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import Loading from 'react-loading'
-import classnames from 'classnames';
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { ControlButtons } from './ControlButtons';
+import classnames from 'classnames';
 
 import { compareFcn } from '../utils/helpers';
 
-import PostThumb from './PostThumb';
+import SortButtons  from './SortButtons';
+import PostThumb from './posts/PostThumb';
 
 class CategoryView extends Component {
 
   state = {
     activeTab: 'all',
     compareField: 'voteScore',
-    reverseOrder: false,
-    fetchingData: false
+    reverseOrder: false
   };
 
   toggle (tab) {
@@ -35,20 +33,13 @@ class CategoryView extends Component {
     this.setState(() => ({ reverseOrder: !this.state.reverseOrder }));
   };
 
-  componentDidUpdate(prevProps) {
-    if(prevProps !== this.props)
-      console.log(this.props);
-  };
-
   render () {
-
-    const { activeTab, fetchingData, compareField, reverseOrder } = this.state;
-    const { posts, categories } = this.props;
-
+    const { activeTab, compareField, reverseOrder } = this.state;
+    const { posts, comments, categories, isFetching } = this.props;
     return (
 
       <div className="container">
-        <ControlButtons
+        <SortButtons
           reverseOrder={reverseOrder}
           onSelect={this.filterBy}
           changeOrder={this.changeOrder}
@@ -71,18 +62,19 @@ class CategoryView extends Component {
           ))}
         </Nav>
 
-        {fetchingData === true
+        {isFetching
           ? <Loading delay={200} type='spin' color='#222' className='loading'/>
           : <TabContent activeTab={activeTab}>
             {categories && categories.map(category => (
               <TabPane key={category.name} tabId={category.name}>
                 <div className="col">
-                  {posts && posts
-                    .filter(post => category.name === 'all' || post.category === category.name)
+                  {posts && posts.length > 0
+                  && posts.filter(post => category.name === 'all' || post.category === category.name)
                     .sort(compareFcn(compareField, reverseOrder))
                     .map(post => (
-                      <PostThumb key={post.id} post={post}/>
-                    ))}
+                      <PostThumb key={post.id} post={post} comments={comments[post.id]}/>
+                    ))
+                  }
                 </div>
               </TabPane>
             ))}
@@ -93,19 +85,14 @@ class CategoryView extends Component {
   }
 }
 
-function mapStateToProps ({ postsCtrl, categoriesCtrl }) {
+function mapStateToProps ({ posts, comments, categories }) {
   return {
-    posts: postsCtrl.posts,
-    categories: categoriesCtrl.categories
+    posts: posts.items,
+    isFetching: posts.isFetching,
+    comments: comments.items,
+    categories: categories.items
   }
 }
-
-// function mapDispatchToProps (dispatch) {
-//   return {
-//     loadPosts: (data) => dispatch(loadPosts(data)),
-//     loadCategories: (data) => dispatch(loadCategories(data))
-//   }
-// }
 
 export default connect(mapStateToProps)(CategoryView);
 
