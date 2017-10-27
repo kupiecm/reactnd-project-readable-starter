@@ -66,11 +66,23 @@ export const addPost = item => dispatch => {
 };
 
 export const editPost = item => dispatch => {
+  dispatch(selectPost(null));
   return API.editPost(item)
     .then(post => dispatch({
       type: EDIT_POST,
       post: post
     }));
+};
+
+export const voteOnPost = item => dispatch => {
+  return API.editPost(item)
+    .then(post => {
+      dispatch({
+        type: EDIT_POST,
+        post: post
+      });
+      dispatch(selectPost(post));
+    });
 };
 
 export const removePost = id => dispatch => {
@@ -135,7 +147,7 @@ export const vote = (item, option, type) => dispatch => {
   return API.vote(item.id, option, type)
     .then(item => {
       if (type === 'posts')
-        dispatch(editPost(item));
+        dispatch(voteOnPost(item));
       if (type === 'comments')
         dispatch(editComment(item));
     });

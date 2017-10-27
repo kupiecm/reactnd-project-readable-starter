@@ -22,7 +22,6 @@ class Comment extends Component {
 
   render () {
     const { comment } = this.props;
-    console.log(comment);
     return (
       <div className="row">
         <div className="col-sm-10">

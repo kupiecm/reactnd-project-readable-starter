@@ -49,7 +49,6 @@ function posts (state = { items: [], selectedPost: null }, action) {
     case EDIT_POST:
       return {
         ...state,
-        selectedPost: null,
         items: state.items.map(p => {
           if (p.id === action.post.id) {
             p = Object.assign({}, action.post);
