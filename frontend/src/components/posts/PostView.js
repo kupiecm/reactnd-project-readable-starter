@@ -39,7 +39,7 @@ class PostView extends Component {
               </div>
               :
               <div>
-                <PostEditRemoveBtns id={post.id}/>
+                <PostEditRemoveBtns post={post}/>
                 <Post post={post} comments={comments[post.id]}/>
                 <div className="separator-50"></div>
                 <Comments parentId={post.id}/>

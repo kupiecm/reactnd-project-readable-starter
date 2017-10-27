@@ -28,7 +28,7 @@ class Root extends Component {
         <div className="App">
           <Header/>
           <Route exact path="/" component={CategoryView}/>
-          <Route path="/post/:id" component={PostView}/>
+          <Route path="/:category/:id" component={PostView}/>
           <Route path="/add" component={PostInput}/>
           <Route path="/edit/:id" component={PostInput}/>
         </div>

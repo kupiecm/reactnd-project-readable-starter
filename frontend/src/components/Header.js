@@ -11,7 +11,7 @@ export default function Header () {
         <Link to="/">
           <img src={logo} className="App-logo" alt="logo"/>
         </Link>
-        <h1 className="App-title">Welcome to React</h1>
+        <h1 className="App-title">Back to main view</h1>
       </header>
       <div className="separator-30"></div>
     </section>

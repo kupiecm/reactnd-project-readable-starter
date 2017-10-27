@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Button, CardTitle, CardText } from 'reactstrap';
 
+import PostEditRemoveBtns from './PostEditRemoveBtns';
 import Vote from '../Vote';
 import { trim } from '../../utils/helpers';
 
@@ -9,14 +10,21 @@ const PostThumb = ({ post, comments }) => {
   return (
     <div className="row">
       <div className="separator-30"></div>
-      <Card body className="text-center">
 
+      <Card body className="text-center">
+        <PostEditRemoveBtns post={post}/>
         <CardTitle>{trim(post.title)}</CardTitle>
         <div className="row">
           <div className="col"></div>
           <div className="col text-center">
             <small className="text-muted">
               <Vote item={post} type="posts"/>
+            </small>
+          </div>
+          <div className="col text-center">
+            <small className="text-muted">
+              <i className="fa fa-address-book-o" aria-hidden="true"></i>
+              <span className="voteScore">{post.author}</span>
             </small>
           </div>
           <div className="col text-center">
@@ -28,7 +36,6 @@ const PostThumb = ({ post, comments }) => {
           <div className="col"></div>
         </div>
         <div className="separator-30"></div>
-        <CardText>{trim(post.body)}</CardText>
         <div>
           <Link
             to={`/post/${post.id}`}>
