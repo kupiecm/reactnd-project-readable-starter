@@ -17,7 +17,7 @@ class PostEditRemoveBtns extends Component {
     return (
       <div id="edit-ctrls" className="row text-right post-controls">
         <div className="col">
-          <Link to={`/edit/${post.id}`}>
+          <Link to={`/${post.category}/${post.id}/edit`}>
             <Button
               outline
               color="info"

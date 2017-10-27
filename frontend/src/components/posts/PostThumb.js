@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, CardTitle, CardText } from 'reactstrap';
+import { Card, Button, CardTitle } from 'reactstrap';
 
 import PostEditRemoveBtns from './PostEditRemoveBtns';
 import Vote from '../Vote';
@@ -38,7 +38,7 @@ const PostThumb = ({ post, comments }) => {
         <div className="separator-30"></div>
         <div>
           <Link
-            to={`/post/${post.id}`}>
+            to={`/${post.category}/${post.id}`}>
             <Button color="info" className="col-4">More</Button>
           </Link>
         </div>

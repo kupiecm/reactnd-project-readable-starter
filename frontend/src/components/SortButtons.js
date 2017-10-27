@@ -25,7 +25,7 @@ class SortButtons extends React.Component {
 
     return (
       <div className="col text-right">
-        <Link to={`/add`}>
+        <Link to={`/new/post/edit`}>
           <Button
             color="success"
             onClick={() => dispatch(selectPost(null))}>

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Loading from 'react-loading'
 import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 
 import { compareFcn } from '../utils/helpers';
 
-import SortButtons  from './SortButtons';
+import SortButtons from './SortButtons';
 import PostThumb from './posts/PostThumb';
 
 /*
@@ -22,13 +23,21 @@ class CategoryView extends Component {
     reverseOrder: false
   };
 
+  componentWillMount() {
+    const { category } = this.props.match.params;
+    this.setState({
+      activeTab: category ? category : 'all'
+    });
+  };
+
   toggle (tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
       });
+      this.props.history.push(`/${tab !== 'all' ? tab : ''}`);
     }
-  }
+  };
 
   filterBy = (compareField) => {
     this.setState({ compareField });
@@ -99,5 +108,5 @@ function mapStateToProps ({ posts, comments, categories }) {
   }
 }
 
-export default connect(mapStateToProps)(CategoryView);
+export default withRouter(connect(mapStateToProps)(CategoryView));
 
