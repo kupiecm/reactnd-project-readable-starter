@@ -33,7 +33,7 @@ class PostView extends Component {
           :
           <div>
             <div className="separator-50"></div>
-            {!post ?
+            {!post || post.deleted ?
               <div className="alert alert-danger text-center" role="alert">
                 <strong>Oh snap!</strong> Could not find the post you were looking for.
               </div>

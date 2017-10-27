@@ -31,7 +31,7 @@ function posts (state = { items: [], selectedPost: null }, action) {
     case SELECT_POST:
       return {
         ...state,
-        selectedPost: action.post,
+        selectedPost: action.post && action.post.id ? action.post : null,
         isFetching: false
       };
     case ADD_POST:
