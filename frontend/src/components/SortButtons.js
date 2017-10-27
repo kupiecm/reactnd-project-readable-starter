@@ -5,6 +5,9 @@ import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } fr
 
 import { selectPost } from '../actions';
 
+/*
+  Component with control buttons needed in CategoryView component to sort posts and add new post.
+ */
 class SortButtons extends React.Component {
   state = {
     dropdownOpen: false

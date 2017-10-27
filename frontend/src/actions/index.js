@@ -28,8 +28,10 @@ export const fetchPosts = () => dispatch => {
         posts: posts
       });
       posts.map(post => {
+        // issue and API call to get comments for every post
         return API.getComments(post.id)
           .then(comments => {
+            // then dispatch action to put right comments to right post
             dispatch({
               type: LOAD_COMMENTS,
               parentId: post.id,

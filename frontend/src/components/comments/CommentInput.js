@@ -5,6 +5,12 @@ import { Form, FormGroup, Input, Button } from 'reactstrap';
 import { addComment, editComment } from '../../actions/index';
 import uuid from 'uuid';
 
+/*
+  Component used to add/edit certain comment. It is used either to add new comment or edit selected one.
+  To differentiate between those two options, selectComment action is issued to set selectedComment field to {...}.
+  That way CommentInput Component is filled with data and it is possible to send request to server to edit comment.
+  Otherwise, when selectedComment is null, new comments are added.
+ */
 class CommentInput extends Component {
 
   state = {
@@ -13,6 +19,7 @@ class CommentInput extends Component {
   };
 
   componentDidUpdate (prevProps) {
+    // update input fields when new comment is selected
     const { selectedComment } = this.props;
     if (prevProps.selectedComment !== selectedComment)
       this.setState({
@@ -31,6 +38,7 @@ class CommentInput extends Component {
     e.preventDefault();
 
     if (selectedComment) {
+      // edit already existing comment
       let editedComment = {
         ...selectedComment,
         timestamp: (new Date()).getTime(),
@@ -40,7 +48,7 @@ class CommentInput extends Component {
         .then(() => this.setState({ author: '', body: '' }));
       return;
     }
-
+    // create a new comment
     let newComment = {
       id: uuid.v4(),
       parentId: parentId,

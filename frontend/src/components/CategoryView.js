@@ -9,6 +9,11 @@ import { compareFcn } from '../utils/helpers';
 import SortButtons  from './SortButtons';
 import PostThumb from './posts/PostThumb';
 
+/*
+  Main app view - lists all posts depending on the category chosen.
+  Categories, posts and comments are taken from store. In local state I keep data needed to filter categories and sort
+  posts.
+ */
 class CategoryView extends Component {
 
   state = {

@@ -7,6 +7,13 @@ import { compareFcn } from '../../utils/helpers';
 import Comment from './Comment';
 import CommentInput from './CommentInput';
 
+/*
+  Comments received in props are in form:
+  comments: {
+    [post0.id]: [comment1, comment2,...],
+    [post1.id]: [comment1, comment2,...],
+  }
+ */
 class Comments extends Component {
 
   render () {

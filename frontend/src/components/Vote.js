@@ -4,6 +4,9 @@ import { Button } from 'reactstrap';
 
 import { vote } from '../actions';
 
+/*
+  Component used to issue voting action. It is reused by Post and Comment components.
+ */
 class Vote extends Component {
 
   vote (option) {

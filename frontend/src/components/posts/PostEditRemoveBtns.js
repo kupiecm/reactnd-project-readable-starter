@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { removePost } from '../../actions/index';
 
-class PostEditBtns extends Component {
+class PostEditRemoveBtns extends Component {
 
   remove = () => {
     const { id, dispatch } = this.props;
@@ -41,4 +41,4 @@ function mapStateToProps (state, ownProps) {
   return { id: ownProps.id };
 }
 
-export default connect(mapStateToProps)(PostEditBtns);
+export default connect(mapStateToProps)(PostEditRemoveBtns);

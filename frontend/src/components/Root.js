@@ -9,6 +9,11 @@ import CategoryView from '../components/CategoryView';
 import PostView from './posts/PostView';
 import PostInput from "./posts/PostInput";
 
+/*
+  Root component routes to the different components depending on the url. Here, I also fetch categories and posts.
+  In fetchPosts action, I dispatch RECEIVE_POSTS and LOAD_COMMENTS action. Those two actions are together as upon
+  receiving data about each post, I issue API call to fetch all comments that belong to certain post.
+ */
 class Root extends Component {
 
   componentWillMount () {

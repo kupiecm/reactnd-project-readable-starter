@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap';
 
 import Vote from '../Vote';
-
 import { timestampToHuman } from '../../utils/helpers';
 
 const Post = ({ post, comments }) => (

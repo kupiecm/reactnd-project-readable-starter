@@ -62,6 +62,14 @@ function posts (state = { items: [], selectedPost: null }, action) {
   }
 }
 
+/*
+  comments are kept as an object with each field representing array of comments for given post
+  items: {
+    first_post.id: [comment1, comment2, ...],
+    second_post.id: [comment1, comment2, ...]
+    ...
+  }
+ */
 function comments (state = { items: {}, selectedComment: null }, action) {
   switch (action.type) {
     case LOAD_COMMENTS:

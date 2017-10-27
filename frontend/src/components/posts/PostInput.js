@@ -6,6 +6,13 @@ import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import uuid from 'uuid';
 import { addPost, editPost } from '../../actions/index';
 
+/*
+  Component used to add/edit certain post. It is used either to add new post or edit a selected one.
+  To differentiate between those two options, selectPost action is issued to set selectedPost field to {...}.
+  That way PostInput component is filled with data and it is possible to send request to server to edit the post.
+  Otherwise, when selectedPost is null, new post is added.
+ */
+
 class PostInput extends Component {
 
   state = {
@@ -16,7 +23,7 @@ class PostInput extends Component {
   };
 
   componentWillMount () {
-
+    // update state with selectedPost to edit post
     const { selectedPost } = this.props;
     if (selectedPost) {
       this.setState({

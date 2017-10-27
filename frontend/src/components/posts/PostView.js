@@ -4,7 +4,7 @@ import Loading from 'react-loading';
 
 import { fetchPost } from '../../actions/index';
 
-import PostEditBtns from './PostEditBtns';
+import PostEditRemoveBtns from './PostEditRemoveBtns';
 import Post from './Post';
 import Comments from '../comments/Comments';
 
@@ -39,7 +39,7 @@ class PostView extends Component {
               </div>
               :
               <div>
-                <PostEditBtns id={post.id}/>
+                <PostEditRemoveBtns id={post.id}/>
                 <Post post={post} comments={comments[post.id]}/>
                 <div className="separator-50"></div>
                 <Comments parentId={post.id}/>
