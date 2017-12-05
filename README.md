@@ -1,4 +1,4 @@
-# Readable UDACITY Project
+# Readable Project
 
 This is a project of a content and comment web app. Users are able to browse articles of predefined categories, publish 
 new articles and comment them. It is also possible to edit and remove both posts and comments.
